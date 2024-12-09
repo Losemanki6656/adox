@@ -83,7 +83,7 @@
                 'type' => 'map'
             ]);
 
-            CRUD::field;
+            CRUD::fields();
             CRUD::field('client_name');
 
             CRUD::field('phone');
