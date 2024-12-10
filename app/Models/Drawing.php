@@ -3,18 +3,12 @@
 namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
-use Carbon\Carbon;
-use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Project extends Model
+class Drawing extends Model
 {
-    use CrudTrait, SoftDeletes, CascadeSoftDeletes;
-
-
-    protected $cascadeDeletes = ['details'];
+    use CrudTrait;
 
     /*
     |--------------------------------------------------------------------------
@@ -22,7 +16,7 @@ class Project extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'projects';
+    protected $table = 'drawings';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
@@ -42,9 +36,14 @@ class Project extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function details(): HasMany
+    public function spare(): BelongsTo
     {
-        return $this->hasMany(ProjectDetail::class, 'project_id');
+        return $this->belongsTo(Spare::class);
+    }
+
+    public function project(): BelongsTo
+    {
+        return $this->belongsTo(Project::class);
     }
 
     /*
@@ -64,9 +63,4 @@ class Project extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
-
-    public function setPhoneAttribute($value)
-    {
-        $this->attributes['phone'] = str_replace(['(', ')', '-', ' '], '', $value);
-    }
 }

@@ -142,6 +142,7 @@
       <path value="$PROJECT_DIR$/vendor/backpack/backupmanager" />
       <path value="$PROJECT_DIR$/vendor/backpack/logmanager" />
       <path value="$PROJECT_DIR$/vendor/backpack/langfilemanager" />
+      <path value="$PROJECT_DIR$/vendor/dyrynda/laravel-cascade-soft-deletes" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.3" />

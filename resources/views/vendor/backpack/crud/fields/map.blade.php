@@ -44,7 +44,6 @@
 
             let value = '{{ $field['value'] ?? "41.30036729968222,69.26528797587619" }}';
 
-            console.log(value)
             let coordinates = value.split(',');
             let map = L.map('map').setView(coordinates, 13);
 
@@ -65,7 +64,6 @@
                 }
 
                 document.getElementById('coordinate').value = coordinate;
-                console.log(document.getElementsByName('coordinate').value)
 
                 currentMarker = L.marker([lat, lng]).addTo(map);
             });

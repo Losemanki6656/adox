@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProjectRequest extends FormRequest
+class BranchRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,9 +26,9 @@ class ProjectRequest extends FormRequest
     {
         return [
             'name' => 'required|min:5|max:255',
-            'client_name' => 'required',
+            'director' => 'required',
             'phone' => 'required',
-            'coordinate' => 'required'
+            'address' => 'required'
         ];
     }
 

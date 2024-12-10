@@ -3,18 +3,12 @@
 namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
-use Carbon\Carbon;
-use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Project extends Model
+class File extends Model
 {
-    use CrudTrait, SoftDeletes, CascadeSoftDeletes;
-
-
-    protected $cascadeDeletes = ['details'];
+    use CrudTrait, SoftDeletes;
 
     /*
     |--------------------------------------------------------------------------
@@ -22,7 +16,7 @@ class Project extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'projects';
+    protected $table = 'files';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
@@ -42,11 +36,6 @@ class Project extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function details(): HasMany
-    {
-        return $this->hasMany(ProjectDetail::class, 'project_id');
-    }
-
     /*
     |--------------------------------------------------------------------------
     | SCOPES
@@ -64,9 +53,4 @@ class Project extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
-
-    public function setPhoneAttribute($value)
-    {
-        $this->attributes['phone'] = str_replace(['(', ')', '-', ' '], '', $value);
-    }
 }

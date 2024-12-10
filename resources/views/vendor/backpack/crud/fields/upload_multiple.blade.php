@@ -84,7 +84,7 @@
 		        });
 
 		        fileInput.change(function() {
-	                inputLabel.html("Files selected. After save, they will show up above.");
+	                inputLabel.html('{{__('messages.files_selected')}}');
 		        	// remove the hidden input, so that the setXAttribute method is no longer triggered
 					$(this).next("input[type=hidden]:not([name='clear_"+fieldName+"[]'])").remove();
 		        });

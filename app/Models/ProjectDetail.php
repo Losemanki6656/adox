@@ -3,18 +3,13 @@
 namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
-use Carbon\Carbon;
-use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Project extends Model
+class ProjectDetail extends Model
 {
-    use CrudTrait, SoftDeletes, CascadeSoftDeletes;
-
-
-    protected $cascadeDeletes = ['details'];
+    use CrudTrait, SoftDeletes;
 
     /*
     |--------------------------------------------------------------------------
@@ -22,10 +17,14 @@ class Project extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'projects';
+    protected $table = 'project_details';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
+
+    protected $casts = [
+        'files' => 'array',
+    ];
     // protected $fillable = [];
     // protected $hidden = [];
     // protected $dates = [];
@@ -42,9 +41,9 @@ class Project extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function details(): HasMany
+    public function project(): BelongsTo
     {
-        return $this->hasMany(ProjectDetail::class, 'project_id');
+        return $this->belongsTo(Project::class, 'project_id', 'id');
     }
 
     /*
@@ -65,8 +64,13 @@ class Project extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function setPhoneAttribute($value)
+
+    public function setFilesAttribute($value)
     {
-        $this->attributes['phone'] = str_replace(['(', ')', '-', ' '], '', $value);
+        $attribute_name = "files";
+        $disk = "public";
+        $destination_path = "files/project-details";
+
+        $this->uploadMultipleFilesToDisk($value, $attribute_name, $disk, $destination_path);
     }
 }

@@ -160,6 +160,7 @@ return [
     'internal_link_placeholder'               => 'Внутренний путь. Например: \'admin/page\' (без кавычек) для \':url\'',
     'external_link'                           => 'Внешняя ссылка',
     'choose_file'                             => 'Выбрать файл',
+    'choose_files'                            => 'Выбрать файлы',
     'new_item'                                => 'Новый элемент',
     'select_entry'                            => 'Выбрать запись',
     'select_entries'                          => 'Выбрать записи',
