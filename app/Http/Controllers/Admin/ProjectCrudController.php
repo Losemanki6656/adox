@@ -14,11 +14,7 @@ use Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanel;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
-/**
- * Class ProjectCrudController
- * @package App\Http\Controllers\Admin
- * @property-read CrudPanel $crud
- */
+
 class ProjectCrudController extends CrudController
 {
     use ListOperation;
@@ -28,10 +24,7 @@ class ProjectCrudController extends CrudController
     use ShowOperation;
     use BulkDeleteOperation;
 
-    /**
-     * Configure the CrudPanel object. Apply settings to all operations.
-     * @return void
-     */
+
     public function setup()
     {
         CRUD::setModel(Project::class);
@@ -68,11 +61,7 @@ class ProjectCrudController extends CrudController
         $this->setupCreateOperation();
     }
 
-    /**
-     * Define what happens when the Create operation is loaded.
-     * @see https://backpackforlaravel.com/docs/crud-operation-create
-     * @return void
-     */
+
     protected function setupCreateOperation()
     {
         CRUD::setValidation(ProjectRequest::class);
@@ -93,10 +82,5 @@ class ProjectCrudController extends CrudController
 
         CRUD::field('amount')->label(trans('messages.amount'))->wrapper(['class' => 'form-group col-md-6']);
 
-        /**
-         * Fields can be defined using the fluent syntax or array syntax:
-         * - CRUD::field('price')->type('number');
-         * - CRUD::addField(['name' => 'price', 'type' => 'number']));
-         */
     }
 }
