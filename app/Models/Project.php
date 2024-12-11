@@ -47,6 +47,11 @@ class Project extends Model
         return $this->hasMany(ProjectDetail::class, 'project_id');
     }
 
+    public function drawings(): HasMany
+    {
+        return $this->hasMany(Drawing::class, 'project_id');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES

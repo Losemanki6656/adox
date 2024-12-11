@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\BranchRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
+use Backpack\CRUD\app\Http\Controllers\Operations\BulkDeleteOperation;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 
@@ -14,6 +15,7 @@ class BranchCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use BulkDeleteOperation;
 
 
     public function setup()
@@ -21,6 +23,7 @@ class BranchCrudController extends CrudController
         CRUD::setModel(\App\Models\Branch::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/branch');
         CRUD::setEntityNameStrings(trans('messages.branch'), trans('messages.branches'));
+        CRUD::enableExportButtons();
     }
 
 

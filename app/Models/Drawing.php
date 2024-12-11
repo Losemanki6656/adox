@@ -24,6 +24,10 @@ class Drawing extends Model
     // protected $hidden = [];
     // protected $dates = [];
 
+    protected $casts = [
+        'files' => 'array'
+    ];
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
@@ -63,4 +67,13 @@ class Drawing extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
+
+    public function setFilesAttribute($value)
+    {
+        $attribute_name = "files";
+        $disk = "public";
+        $destination_path = "files/project-drawings";
+
+        $this->uploadMultipleFilesToDisk($value, $attribute_name, $disk, $destination_path);
+    }
 }

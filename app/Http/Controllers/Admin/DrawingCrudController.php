@@ -3,23 +3,26 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\DrawingRequest;
+use App\Models\Project;
+use App\Models\Spare;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
+use Backpack\CRUD\app\Http\Controllers\Operations\BulkDeleteOperation;
 use Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
 use Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
 use Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
 use Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 use Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
-use Illuminate\Http\Request;
 
 
 class DrawingCrudController extends CrudController
 {
     use ListOperation;
-    use CreateOperation  { store as traitStore; }
+    use CreateOperation;
     use UpdateOperation;
     use DeleteOperation;
     use ShowOperation;
+    use BulkDeleteOperation;
 
 
     public function setup()
@@ -27,20 +30,53 @@ class DrawingCrudController extends CrudController
         CRUD::setModel(\App\Models\Drawing::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/drawing');
         CRUD::setEntityNameStrings(trans('messages.drawing'), trans('messages.drawings'));
+        CRUD::enableExportButtons();
+
+        CRUD::addFilter([
+            'name' => 'project_filter',
+            'type' => 'select2',
+            'label' => trans('backpack::base.filter_by_project')
+        ], function () {
+            return Project::pluck('name', 'id')->toArray();
+        }, function ($value) {
+            $this->crud->addClause('where', 'project_id', $value);
+        });
+
+        CRUD::addFilter([
+            'name' => 'spare_filter',
+            'type' => 'select2',
+            'label' => trans('backpack::base.filter_by_spare')
+        ], function () {
+            return Spare::pluck('name', 'id')->toArray();
+        }, function ($value) {
+            $this->crud->addClause('where', 'spare_id', $value);
+        });
     }
 
 
     protected function setupListOperation()
     {
+        CRUD::with(['project', 'spare']);
         CRUD::column('id');
-        CRUD::column('project_id');
-        CRUD::column('spare_id');
-        CRUD::column('count');
-        CRUD::column('files');
-        CRUD::column('description');
-        CRUD::column('created_at');
-        CRUD::column('updated_at');
-        CRUD::column('deleted_at');
+        CRUD::column('project_id')->label(trans('messages.projects'))->type('select');
+        CRUD::column('spare_id')->label(trans('messages.spare'))->type('select');
+        CRUD::column('count')->label(trans('messages.count'));
+        CRUD::column('files')->type('array_count')->label('Files');
+        CRUD::column('description')->label(trans('messages.description'));
+        CRUD::column('created_at')->label(trans('messages.created_at'));
+
+
+    }
+
+    protected function setupShowOperation()
+    {
+        CRUD::with(['project', 'spare']);
+        CRUD::column('project_id')->label(trans('messages.projects'))->type('select');
+        CRUD::column('spare_id')->label(trans('messages.spare'))->type('select');
+        CRUD::column('count')->label(trans('messages.count'));
+        CRUD::column('files')->type('upload_multiple')->label('Files');
+        CRUD::column('description')->label(trans('messages.description'));
+        CRUD::column('created_at')->label(trans('messages.created_at'));
 
 
     }
@@ -51,56 +87,18 @@ class DrawingCrudController extends CrudController
         CRUD::setValidation(DrawingRequest::class);
 
         CRUD::field('project_id')->label(trans('messages.projects'))->type('select2')->model('App\Models\Project');
-        CRUD::field('description')->label(trans('messages.description'));
+        CRUD::field('spare_id')->label(trans('messages.spare'))->type('select2')->model('App\Models\Spare')->wrapper(['class' => 'form-group col-md-6']);
+        CRUD::field('count')->label(trans('messages.count'))->wrapper(['class' => 'form-group col-md-6']);
         CRUD::addField([
-            'name' => 'testimonials',
-            'label' => trans('messages.spares'),
-            'type' => 'repeatable',
-            'fields' => [
-                [
-                    'name' => 'spare_id',
-                    'type' => 'select2',
-                    'model' => 'App\Models\Spare',
-                    'label' => trans('messages.spare'),
-                    'wrapper' => ['class' => 'form-group col-md-4'],
-                ],
-                [
-                    'name' => 'count',
-                    'type' => 'number',
-                    'label' => trans('messages.count'),
-                    'wrapper' => ['class' => 'form-group col-md-4'],
-                ],
-                [
-                    'name' => 'files',
-                    'type' => 'upload_multiple',
-                    'upload' => true,
-                    'label' => trans('messages.files'),
-                    'wrapper' => ['class' => 'form-group col-md-4'],
-                ]
-            ],
-            'new_item_label' => trans('messages.add_group'),
-            'init_rows' => 0,
-            'min_rows' => 1,
-            'max_rows' => 20,
+            'name' => 'files',
+            'label' => trans('messages.files'),
+            'type' => 'upload_multiple',
+            'upload' => true,
         ]);
+        CRUD::field('description')->label(trans('messages.description'));
 
     }
 
-    public function store(Request $request)
-    {
-        $this->crud->validateRequest(DrawingRequest::class);
-
-        $project = $request->project_id;
-        $des = $request->description;
-        $t = json_decode($request->testimonials);
-
-        foreach ($t as $item) {
-            $files = $item->files;
-            dd($files);
-        }
-
-        dd($t);
-    }
 
     protected function setupUpdateOperation()
     {

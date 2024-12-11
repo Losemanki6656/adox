@@ -30,14 +30,19 @@ class ProjectCrudController extends CrudController
         CRUD::setModel(Project::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/project');
         CRUD::setEntityNameStrings(trans('messages.project'), trans('messages.projects'));
+
+        CRUD::enableExportButtons();
     }
 
 
     protected function setupListOperation()
     {
+        CRUD::with(['details', 'drawings']);
         CRUD::column('id');
         CRUD::column('name')->label(trans('messages.name'));
         CRUD::column('client_name')->label(trans('messages.client_name'));
+        CRUD::column('details')->type('details')->label(trans('messages.details'));
+        CRUD::column('drawings')->type('drawings')->label(trans('messages.drawings'));
         CRUD::column('phone')->type('phone')->label(trans('messages.phone'));
         CRUD::column('amount')->type('number')->label(trans('messages.amount'));
         CRUD::column('created_at')->label(trans('messages.created_at'));

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\ProjectDetailRequest;
+use App\Models\Project;
 use App\Models\ProjectDetail;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Http\Controllers\Operations\BulkDeleteOperation;
@@ -28,6 +29,17 @@ class ProjectDetailCrudController extends CrudController
         CRUD::setModel(ProjectDetail::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/project-detail');
         CRUD::setEntityNameStrings(trans('messages.project_detail'), trans('messages.project_details'));
+        CRUD::enableExportButtons();
+
+        CRUD::addFilter([
+            'name' => 'project_filter',
+            'type' => 'select2',
+            'label' => trans('backpack::base.filter_by_project')
+        ], function () {
+            return Project::pluck('name', 'id')->toArray();
+        }, function ($value) {
+            $this->crud->addClause('where', 'project_id', $value);
+        });
     }
 
 

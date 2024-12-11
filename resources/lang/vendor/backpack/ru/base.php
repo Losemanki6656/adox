@@ -104,6 +104,7 @@ return [
     'accepted_result' => 'Принять задач',
     'filter_by_user' => 'Филтр по пользователи',
     'filter_by_project' => 'Филтр по проект',
+    'filter_by_spare' => 'Филтр по запчасти',
     'created_at' => 'Создано',
     'updated_at' => 'Обновлено',
     'expired' => 'Истек',

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\SpareRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
+use Backpack\CRUD\app\Http\Controllers\Operations\BulkDeleteOperation;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 
@@ -14,6 +15,7 @@ class SpareCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use BulkDeleteOperation;
 
 
     public function setup()
@@ -21,6 +23,7 @@ class SpareCrudController extends CrudController
         CRUD::setModel(\App\Models\Spare::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/spare');
         CRUD::setEntityNameStrings(trans('messages.spare'), trans('messages.spares'));
+        CRUD::enableExportButtons();
     }
 
 
